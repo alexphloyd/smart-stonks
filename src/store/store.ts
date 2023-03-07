@@ -1,8 +1,10 @@
-import { Action, configureStore, ThunkAction } from '@reduxjs/toolkit';
+import { configureStore } from '@reduxjs/toolkit';
+
 import mobileMenu from './slices/mobileMenuSlice';
 import allBots from '../features/bots/slice/userBotsSlice';
 import auth from '../features/auth/slice/authSlice';
 import apiKeys from '../features/apiKeys/slice/apiKeysSlice';
+import { apiKeyMiddleware } from '@/features/apiKeys/slice/listeners/listeners';
 
 export const store = configureStore({
   reducer: {
@@ -11,4 +13,5 @@ export const store = configureStore({
     auth,
     apiKeys,
   },
+  middleware: (getDefaultMiddleware) => getDefaultMiddleware().prepend(apiKeyMiddleware),
 });

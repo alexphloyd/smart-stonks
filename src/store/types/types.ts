@@ -1,4 +1,4 @@
-import { Action, ThunkAction } from '@reduxjs/toolkit';
+import { Action, ThunkAction, TypedStartListening } from '@reduxjs/toolkit';
 import { store } from '../store';
 
 export type AppDispatch = typeof store.dispatch;
@@ -9,3 +9,5 @@ export type AppThunk<ReturnType = void> = ThunkAction<
   unknown,
   Action<string>
 >;
+
+export type AppStartListening = TypedStartListening<RootState, AppDispatch>;
