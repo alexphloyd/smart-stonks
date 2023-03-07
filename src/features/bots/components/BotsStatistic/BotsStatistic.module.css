@@ -1,0 +1,22 @@
+.table {
+  display: grid;
+  grid-template-columns: 100%;
+  grid-auto-rows: 60px;
+  row-gap: 30px;
+  column-gap: 3%;
+  padding: 20px 5% 40px 5%;
+  padding-top: 20px;
+  min-height: 570px;
+}
+
+@media (min-width: 719px) {
+  .table {
+    grid-template-columns: 48.5% 48.5%;
+  }
+}
+
+@media (min-width: 1150px) {
+  .table {
+    grid-template-columns: 31.3333% 31.3333% 31.3333%;
+  }
+}

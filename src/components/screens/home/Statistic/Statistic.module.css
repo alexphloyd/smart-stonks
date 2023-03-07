@@ -1,0 +1,21 @@
+.container {
+  background-color: var(--second-background-color);
+  border-top-left-radius: 50px;
+  border-top-right-radius: 50px;
+  padding-top: 35px;
+}
+
+.bigLabel {
+  font-size: 32px;
+  text-align: center;
+  color: var(--primary-text-color);
+  letter-spacing: 2px;
+}
+
+.additionalText {
+  font-size: 14px;
+  color: gray;
+  text-align: center;
+  margin-bottom: 20px;
+  padding: 0 15px 0 15px;
+}

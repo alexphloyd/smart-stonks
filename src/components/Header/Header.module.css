@@ -1,0 +1,15 @@
+.sectionContainer {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+}
+
+.settings {
+  display: none;
+}
+
+@media (min-width: 900px) {
+  .settings {
+    display: flex;
+  }
+}

@@ -1,0 +1,22 @@
+.button {
+  width: 32px;
+  height: 32px;
+  padding: 7px;
+
+  background: transparent;
+  border: 0px;
+  color: var(--primary-text-color);
+  cursor: pointer;
+  transition: all;
+  transition-duration: var(--transition-duration);
+  z-index: 5000;
+}
+
+.button:hover {
+  color: var(--primary-text-color-hovered);
+}
+
+.icon {
+  width: 19px;
+  height: 19px;
+}

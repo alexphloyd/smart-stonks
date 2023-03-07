@@ -1,0 +1,48 @@
+.form {
+  position: relative;
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+
+.buttonContainer {
+  position: relative;
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin-top: 16px;
+}
+
+.submitButton {
+  cursor: pointer;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  display: inline-flex;
+  justify-content: center;
+  font-size: 16px;
+  font-family: inherit;
+  text-align: center;
+  text-decoration: none;
+  outline: none;
+  padding: 12px 24px;
+  line-height: 24px;
+  min-width: 80px;
+  word-break: keep-all;
+  color: rgb(24, 26, 32);
+  border-radius: 4px;
+  min-height: 24px;
+  background-color: var(--button-bg-orange);
+  white-space: normal;
+  width: 100%;
+  max-width: 400px;
+  height: 48px;
+  transition: all;
+  transition-duration: 200ms;
+}
+
+.submitButton:hover {
+  background-color: var(--button-bg-orange-hovered);
+}

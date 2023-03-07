@@ -1,0 +1,761 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+datasource db {
+  provider = "postgres"
+  url      = env("DATABASE_URL")
+}
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+// --------------------------------------
+
+model User {
+  id             Int      @id @default(autoincrement())
+  createdAt      DateTime @default(now())
+  updatedAt      DateTime @updatedAt
+  name           String?
+  email          String   @unique
+  hashedPassword String?
+  role           String   @default("USER")
+
+  // Pingeon
+  pg_Token String?
+
+  tokens   Token[]
+  sessions Session[]
+
+  wallets            Wallet[]
+  balance            Balance[]
+  transactions       Transaction[]
+  addFundsOps        AddFundsOp[]
+  buySellOps         BuySellOp[]
+  bt_botTestResults  bt_BotTestResult[]
+  bt_apiKeys         bt_Apikey[]
+  bt_bots            bt_Bot[]
+  bt_botErrors       bt_BotError[]
+  bt_balances        bt_Balance[]
+  bt_balanceChange   bt_BalanceChange[]
+  bt_BotProfitResult bt_BotProfitResult[]
+  bt_Unit            bt_Unit[]
+  bt_db_Debt         bt_db_Debt[]
+
+  debt bt_db_UserDebt?
+
+  bt_db_Transaction bt_db_Transaction[]
+  wallet            bt_Wallet?
+  bt_db_BtcTx       bt_db_BtcTx[]
+}
+
+model Session {
+  id                 Int       @id @default(autoincrement())
+  createdAt          DateTime  @default(now())
+  updatedAt          DateTime  @updatedAt
+  expiresAt          DateTime?
+  handle             String    @unique
+  hashedSessionToken String?
+  antiCSRFToken      String?
+  publicData         String?
+  privateData        String?
+
+  user   User? @relation(fields: [userId], references: [id])
+  userId Int?
+}
+
+model Token {
+  id          Int      @id @default(autoincrement())
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+  hashedToken String
+  type        String
+  // See note below about TokenType enum
+  // type        TokenType
+  expiresAt   DateTime
+  sentTo      String
+
+  user   User @relation(fields: [userId], references: [id])
+  userId Int
+
+  @@unique([hashedToken, type])
+}
+
+// NOTE: It's highly recommended to use an enum for the token type
+//       but enums only work in Postgres.
+//       See: https://blitzjs.com/docs/database-overview#switch-to-postgresql
+// enum TokenType {
+//   RESET_PASSWORD
+// }
+
+// --------------------------------------
+
+// model Operation {
+//   id        Int      @id @default(autoincrement())
+//   createdAt DateTime @default(now())
+//   updatedAt DateTime @updatedAt
+
+//   type OperationType
+
+//   transactions Transaction[]
+// }
+
+// enum OperationType {
+//   AddMoney
+//   Exchange
+// }
+
+model Stock {
+  id            Int       @id @default(autoincrement())
+  symbol        String    @unique
+  isCrypto      Boolean?
+  name          String
+  createdAt     DateTime  @default(now())
+  updatedAt     DateTime  @updatedAt
+  loadedAt      DateTime?
+  lastFrameDate DateTime?
+
+  frames      Frame[]
+  Balance     Balance[]
+  AddFundsOp  AddFundsOp[]
+  Transaction Transaction[]
+  BuySellOp   BuySellOp[]
+  price       Price?
+}
+
+model Frame {
+  id        Int      @id @default(autoincrement())
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  date      DateTime
+  stockId   Int
+  stock     Stock    @relation(fields: [stockId], references: [id])
+
+  open   Float @default(0)
+  close  Float @default(0)
+  low    Float @default(0)
+  high   Float @default(0)
+  volume Float @default(0)
+}
+
+model Wallet {
+  id        Int      @id @default(autoincrement())
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  ownerId Int
+  owner   User @relation(fields: [ownerId], references: [id])
+
+  movements WalletMovement[]
+
+  //balance Float
+  balance      Balance[]
+  transactions Transaction[]
+  addFundsOps  AddFundsOp[]
+  buySellOps   BuySellOp[]
+}
+
+model WalletMovement {
+  id        Int      @id @default(autoincrement())
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  walletId Int
+  wallet   Wallet @relation(fields: [walletId], references: [id])
+
+  balance Float
+}
+
+model Balance {
+  id        Int      @id @default(autoincrement())
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  userId   Int
+  user     User    @relation(fields: [userId], references: [id])
+  walletId Int?
+  wallet   Wallet? @relation(fields: [walletId], references: [id])
+
+  movementType BalanceMovementType
+  quantity     Float
+  stockId      Int?
+  stock        Stock?              @relation(fields: [stockId], references: [id])
+  currencyId   Int?
+  currency     Currency?           @relation(fields: [currencyId], references: [id])
+}
+
+enum BalanceMovementType {
+  Currency
+  Stock
+}
+
+model Currency {
+  id   Int    @id @default(autoincrement())
+  name String
+  code String @unique
+
+  balance Balance[]
+}
+
+model Transaction {
+  id           Int         @id @default(autoincrement())
+  createdAt    DateTime    @default(now())
+  updatedAt    DateTime    @updatedAt
+  addFundsOpId Int?
+  addFundsOp   AddFundsOp? @relation(fields: [addFundsOpId], references: [id])
+  buySellOpId  Int?
+  BuySellOp    BuySellOp?  @relation(fields: [buySellOpId], references: [id])
+
+  userId Int
+  user   User @relation(fields: [userId], references: [id])
+
+  walletId Int
+  wallet   Wallet @relation(fields: [walletId], references: [id])
+
+  stockId Int
+  stock   Stock @relation(fields: [stockId], references: [id])
+
+  amount Float
+}
+
+model AddFundsOp {
+  id        Int      @id @default(autoincrement())
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  userId Int
+  user   User @relation(fields: [userId], references: [id])
+
+  walletId Int
+  wallet   Wallet @relation(fields: [walletId], references: [id])
+
+  stockId Int
+  stock   Stock @relation(fields: [stockId], references: [id])
+
+  amount Float
+
+  transactions Transaction[]
+}
+
+model BuySellOp {
+  id        Int      @id @default(autoincrement())
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  userId Int
+  user   User @relation(fields: [userId], references: [id])
+
+  walletId Int
+  wallet   Wallet @relation(fields: [walletId], references: [id])
+
+  stockId Int
+  stock   Stock @relation(fields: [stockId], references: [id])
+
+  amount      Float
+  price       Float
+  rubPrice    Float?   @default(0)
+  isProcessed Boolean? @default(false)
+
+  transactions Transaction[]
+}
+
+model Price {
+  stockId Int   @id
+  stock   Stock @relation(fields: [stockId], references: [id])
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  price Float
+
+  //Stock Stock[]
+}
+
+model bt_Pair {
+  id         Int            @id @default(autoincrement())
+  name       String         @unique
+  loadedDays bt_LoadedDay[]
+  frames     bt_Frame2[]
+}
+
+model bt_LoadedDay {
+  id  Int    @id @default(autoincrement())
+  day String
+  // 2022-02-20 => https://data.binance.vision/data/spot/daily/klines/BTCUSDT/5m/BTCUSDT-5m-2022-02-20.zip
+
+  pairId Int
+  pair   bt_Pair @relation(fields: [pairId], references: [id])
+}
+
+model bt_Frame2 {
+  id        Int      @id @default(autoincrement())
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  date      DateTime
+  pairId    Int
+  pair      bt_Pair  @relation(fields: [pairId], references: [id])
+
+  open   Float @default(0)
+  close  Float @default(0)
+  low    Float @default(0)
+  high   Float @default(0)
+  volume Float @default(0)
+
+  @@unique([pairId, date])
+}
+
+model bt_BotTestResult {
+  id       Int     @id @default(autoincrement())
+  userId   Int
+  user     User    @relation(fields: [userId], references: [id])
+  pairname String
+  comment  String?
+
+  createdAt DateTime @default(now())
+
+  result Json
+
+  r_isProcessed  Boolean? @default(false)
+  r_profitYearly Float    @default(0)
+  r_maxDrawdown  Float    @default(0)
+  r_activeTime   Float    @default(0)
+  r_ordersCounts Int      @default(0)
+  r_priceOverlap Float    @default(0)
+
+  botId Int?
+  bot   bt_Bot? @relation(fields: [botId], references: [id])
+
+  gridType    String?
+  log_pricesK Float?
+  log_ordersK Float?
+
+  simulationName     String @default("")
+  simulationNameAuto String @default("")
+
+  ordersWeights2  String?
+  priceDistances2 String?
+}
+
+model bt_Apikey {
+  id       Int         @id @default(autoincrement())
+  userId   Int
+  user     User        @relation(fields: [userId], references: [id])
+  exchange bt_Exchange
+  name     String
+  key      String
+  secret   String
+
+  bots           bt_Bot[]
+  balances       bt_Balance[]
+  balanceChanges bt_BalanceChange[]
+
+  @@unique([userId, key, secret])
+  @@map("bt_ApiKey")
+}
+
+model bt_Bot {
+  id           Int               @id @default(autoincrement())
+  userId       Int
+  user         User              @relation(fields: [userId], references: [id])
+  apiKey       bt_Apikey         @relation(fields: [apiKeyId], references: [id])
+  apiKeyId     Int
+  market       bt_ExchangeMarket
+  name         String
+  description  String?
+  symbol       String
+  simulationId Int?
+  comment      String?
+  settings     Json? // dunno where correct settings is
+  units        bt_Unit[]
+  unitItems    bt_UnitItem[]
+
+  isFinishedLastCycle Boolean? @default(false)
+  initialDeposit      Float
+  priceOverlap        Float
+  ordersCount         Int
+  firstOrderShift     Float
+  regridIfShift       Float
+  martin              Float
+  targetProfit        Float
+  leverage            Int
+  type                String
+  ordersWeights       String
+  priceDistances      String
+
+  createdAt DateTime? @default(now())
+  updatedAt DateTime? @updatedAt
+
+  orders            bt_BotOrder[]
+  trades            bt_BotTrade[]
+  trades_takeProfit bt_BotTakeProfitTrade[]
+  grid              bt_Bot_GridOrder[]
+  errors            bt_BotError[]
+  notifications     bt_BotNotification[]
+
+  stats_filledOrders          Int?
+  stats_lastFinishedCyclaDate DateTime?
+  stats_lastTradeDate         DateTime?
+  stats_currentlyPlaced       Int?
+
+  prog_takeProfitPrice Float?
+  prog_currentPrice    Float?
+  prog_firstOrderPrice Float?
+  prog_nextOrderPrice  Float?
+  prog_lastOrderPrice  Float?
+  prog_liqPrice        Float?
+  prog_orderPrices     String?
+  prog_prog            Float?
+
+  // pnl_lastProccessedTradeId Int?
+  pnl_firstTrade        DateTime?
+  pnl_earnedUsdByCells  Float? // total usd earned
+  pnl_earnedUsdByTrades Float?
+  pnl_earnedUsd_last1h  Float?
+  pnl_earnedUsd_last3h  Float?
+  pnl_earnedUsd_last8h  Float?
+  pnl_earnedUsd_last24h Float?
+  pnl_earnedUsd_last7d  Float?
+  pnl_earnedUsd_last31d Float?
+  pnl_finished_total    Int? // take-profits count
+  pnl_finished_24h      Int?
+  pnl_finished_31d      Int?
+  pnl_deposit_actual    Float?
+
+  state_isArchived          Boolean? @default(false)
+  state_isPaused            Boolean? @default(false)
+  state_isTesting           Boolean? @default(false)
+  state_isLastErrorResolved Boolean? @default(false)
+  state_tpOnly              Boolean? @default(false)
+
+  misc_ordersWeights String? // del? as we have grid
+
+  partial_enabled           Boolean? @default(false)
+  partial_activeOrdersCount Int?     @default(0)
+  partial_minPctOrders      Float?   @default(0)
+
+  lock_lockedUntil DateTime?
+  lock_lockedAt    DateTime?
+  lock_reason      String?
+
+  notifs_disabled Boolean?
+  notifs_minProg  Float?
+  deps_status     bt_DepsStatus?
+
+  hp_tpPlaced     Boolean?
+  hp_ordersPlaced Boolean?
+
+  testResults   bt_BotTestResult[]
+  profitResults bt_BotProfitResult[]
+  deps          bt_BotDep[]          @relation(name: "bot_owner")
+  debts         bt_db_Debt[]
+  deps_refs     bt_BotDep[]          @relation(name: "bot_cond")
+}
+
+model bt_Wallet {
+  id Int @id @default(autoincrement())
+
+  address String @unique()
+
+  balance        Float @default(0)
+  balanceInitial Float @default(0)
+
+  userId Int?  @unique()
+  user   User? @relation(fields: [userId], references: [id])
+
+  createdAt DateTime? @default(now())
+  updatedAt DateTime? @updatedAt
+
+  transactions bt_db_Transaction[]
+}
+
+model bt_db_Transaction {
+  id   Int     @id @default(autoincrement())
+  txid String?
+
+  userId Int
+  user   User @relation(fields: [userId], references: [id])
+
+  walletId Int
+  wallet   bt_Wallet @relation(fields: [walletId], references: [id])
+
+  type bt_db_TxType
+
+  isConfirmed Boolean   @default(false)
+  isRvd       Boolean?  @default(false) // isReviewed
+  confirmedAt DateTime?
+  createdAt   DateTime? @default(now())
+  updatedAt   DateTime? @updatedAt
+  usdPriceAt  DateTime?
+
+  sumBtc Decimal @default(0) //main
+  sumUsd Decimal @default(0)
+}
+
+enum bt_db_TxType {
+  DEBIT
+  CREDIT
+}
+
+enum bt_DepsStatus {
+  ACTIVE
+  WAITING
+}
+
+model btc_Price {
+  id   Int      @id @default(autoincrement())
+  date DateTime @default(now())
+
+  price Float @default(0)
+}
+
+model bt_BotError {
+  id     Int     @id @default(autoincrement())
+  botId  Int?
+  bot    bt_Bot? @relation(fields: [botId], references: [id])
+  userId Int?
+  user   User?   @relation(fields: [userId], references: [id])
+
+  error String // short
+  text  String // full
+
+  level bt_LogLevel?
+
+  createdAt DateTime @default(now())
+}
+
+enum bt_LogLevel {
+  ERROR
+  LOG
+}
+
+model bt_BotNotification {
+  id    Int    @id @default(autoincrement())
+  botId Int
+  bot   bt_Bot @relation(fields: [botId], references: [id])
+
+  short String // short
+  full  String // full
+
+  createdAt DateTime @default(now())
+}
+
+model bt_BotOrder {
+  id     Int             @id @default(autoincrement())
+  botId  Int
+  bot    bt_Bot          @relation(fields: [botId], references: [id])
+  type   bt_BotOrderType
+  amount Float
+  price  Float
+
+  exch_clientOrderId String
+  exch_orderId       BigInt
+
+  createdAt DateTime @default(now())
+}
+
+model bt_BotTrade {
+  id     Int             @id @default(autoincrement())
+  // orderId String
+  botId  Int
+  bot    bt_Bot          @relation(fields: [botId], references: [id])
+  type   bt_BotOrderType
+  amount Float
+  price  Float
+
+  takeProfits bt_BotTakeProfitTrade[]
+
+  createdAt DateTime @default(now())
+}
+
+model bt_BotTakeProfitTrade {
+  id      Int         @id @default(autoincrement())
+  // orderId String
+  botId   Int
+  bot     bt_Bot      @relation(fields: [botId], references: [id])
+  tradeId Int
+  trade   bt_BotTrade @relation(fields: [tradeId], references: [id])
+  profit  Float
+
+  createdAt DateTime @default(now())
+}
+
+model bt_Bot_GridOrder {
+  id     Int             @id @default(autoincrement())
+  botId  Int
+  bot    bt_Bot          @relation(fields: [botId], references: [id])
+  type   bt_BotOrderType
+  amount Float
+  price  Float
+
+  createdAt DateTime @default(now())
+}
+
+enum bt_BotOrderType {
+  BUY
+  SELL
+}
+
+enum bt_Exchange {
+  BINANCE
+}
+
+enum bt_ExchangeMarket {
+  SPOT
+  FUTURES
+}
+
+model bt_GlobalState {
+  id                    Int       @id @default(1) // only one row here
+  runningBots_isActive  Boolean   @default(false)
+  runningBots_startedAt DateTime?
+  runningBots_disabled  Boolean?
+}
+
+model bt_Balance {
+  id       Int       @id @default(autoincrement())
+  userId   Int
+  user     User      @relation(fields: [userId], references: [id])
+  apikeyId Int
+  apikey   bt_Apikey @relation(fields: [apikeyId], references: [id])
+  balance  Float     @default(0)
+  uPNL     Float     @default(0)
+
+  createdAt DateTime @default(now())
+}
+
+model bt_BalanceChange {
+  id            Int        @id @default(autoincrement())
+  date          DateTime   @default(now())
+  userId        Int
+  user          User       @relation(fields: [userId], references: [id])
+  apikeyId      Int?
+  apikey        bt_Apikey? @relation(fields: [apikeyId], references: [id])
+  balanceChange Float      @default(0)
+  uPNLChange    Float      @default(0)
+
+  createdAt DateTime @default(now())
+
+  @@unique([id, userId])
+}
+
+model tg_ParsedUser {
+  id       Int     @id @default(autoincrement())
+  userId   String
+  source   String
+  username String?
+
+  dates_lastMessage  DateTime?
+  dates_firstMessage DateTime?
+  messagesCount      Int?
+}
+
+model bt_LeverageBracket {
+  id               Int    @id @default(autoincrement())
+  symbol           String
+  maintMarginRatio Float
+  maintAmount      Float
+
+  @@index([symbol])
+}
+
+model bt_BotProfitResult {
+  id Int @id @default(autoincrement())
+
+  periodD DateTime
+  period  DateTime
+  userId  Int
+  user    User     @relation(fields: [userId], references: [id])
+  botId   Int
+  bot     bt_Bot   @relation(fields: [botId], references: [id])
+
+  pnl_earnedUsd_1d Float
+  pnl_earnedUsd_1w Float
+  pnl_earnedUsd_1m Float
+
+  @@unique([periodD, userId, botId])
+}
+
+model bt_Unit {
+  id      Int    @id @default(autoincrement())
+  name    String
+  comment String
+  userId  Int
+  user    User   @relation(fields: [userId], references: [id])
+
+  bots bt_Bot[]
+
+  balance_total Float @default(0)
+  balance_used  Float @default(0)
+
+  createdAt   DateTime      @default(now())
+  updatedAt   DateTime      @updatedAt
+  bt_UnitItem bt_UnitItem[]
+}
+
+model bt_UnitItem {
+  id        Int     @id @default(autoincrement())
+  unitId    Int
+  botId     Int
+  targetId  Int?
+  dep_field String?
+
+  unit bt_Unit @relation(fields: [unitId], references: [id])
+  bot  bt_Bot  @relation(fields: [botId], references: [id])
+}
+
+model bt_BotDep {
+  id             Int     @id @default(autoincrement())
+  botId          Int
+  cond_botId     Int?
+  cond_field     String?
+  cond_statement String?
+  cond_value     String?
+
+  bot      bt_Bot  @relation(name: "bot_owner", fields: [botId], references: [id])
+  cond_bot bt_Bot? @relation(name: "bot_cond", fields: [cond_botId], references: [id])
+}
+
+model bt_db_UserDebt {
+  id Int @id @default(autoincrement())
+
+  userId Int  @unique()
+  user   User @relation(fields: [userId], references: [id])
+
+  usdEarned  Decimal @default(0)
+  usdDebtTtl Decimal @default(0)
+  usdDebtCur Decimal @default(0)
+  usdPaid    Decimal @default(0)
+
+  btc_wallet String? //
+}
+
+model bt_db_Debt {
+  id Int @id @default(autoincrement())
+
+  period DateTime
+  userId Int
+  user   User     @relation(fields: [userId], references: [id])
+  botId  Int
+  bot    bt_Bot   @relation(fields: [botId], references: [id])
+
+  res_Debt   Decimal
+  res_Earned Decimal
+
+  @@unique([period, userId, botId])
+}
+
+model bt_db_BtcTx {
+  id Int @id @default(autoincrement())
+
+  period DateTime
+  userId Int
+  user   User     @relation(fields: [userId], references: [id])
+
+  isConfirmed Boolean @default(false)
+
+  res_amountBtc Float
+  res_amountUsd Float @default(0)
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
