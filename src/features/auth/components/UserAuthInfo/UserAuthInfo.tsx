@@ -10,8 +10,9 @@ import s from './UserAuthInfo.module.css';
 
 export const UserAuthInfo = () => {
   const dispatch = useAppDispatch();
-  const { user, status } = useAppSelector((store) => store.auth);
+  const { user, authStatus } = useAppSelector((store) => store.auth);
 
+  // presist
   useEffect(() => {
     dispatch(getUserFromSession());
   }, []);
@@ -20,7 +21,7 @@ export const UserAuthInfo = () => {
     dispatch(logout());
   };
 
-  if (status === 'pending') return <UserAuthInfoSkelet />;
+  if (authStatus === 'pending') return <UserAuthInfoSkelet />;
 
   if (user) {
     return (

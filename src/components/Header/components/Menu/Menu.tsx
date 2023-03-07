@@ -4,9 +4,9 @@ import { ItemMenuSkelet } from './skelets/ItemMenuSkelet';
 import s from './Menu.module.css';
 
 export const Menu = () => {
-  const { user, status } = useAppSelector((store) => store.auth);
+  const { user, authStatus } = useAppSelector((store) => store.auth);
 
-  if (status === 'pending') {
+  if (authStatus === 'pending') {
     return (
       <nav className={s.list}>
         <ItemMenuSkelet />

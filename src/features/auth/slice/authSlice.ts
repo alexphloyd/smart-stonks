@@ -9,13 +9,13 @@ import { logout } from './thunks/logout';
 export interface TAuthSlice {
   user: TUser | null;
   error: TAuthError | null;
-  status: 'idle' | 'pending' | 'success' | 'error';
+  authStatus: 'idle' | 'pending' | 'success' | 'error';
 }
 
 const initialState: TAuthSlice = {
   user: null,
   error: null,
-  status: 'pending',
+  authStatus: 'pending',
 };
 
 const authSlice = createSlice({
@@ -28,32 +28,32 @@ const authSlice = createSlice({
   },
   extraReducers: (builder) => {
     builder.addCase(createNewUser.rejected, (state, action) => {
-      state.status = 'error';
+      state.authStatus = 'error';
       state.error = action.payload as TAuthError;
     });
 
     builder.addCase(login.fulfilled, (state, action: PayloadAction<TUser>) => {
       state.user = action.payload;
       state.error = null;
-      state.status = 'success';
+      state.authStatus = 'success';
     });
     builder.addCase(login.rejected, (state, action) => {
-      state.status = 'error';
+      state.authStatus = 'error';
       state.error = action.payload as TAuthError;
     });
 
     builder.addCase(logout.fulfilled, (state) => {
-      (state.error = null), (state.status = 'success'), (state.user = null);
+      (state.error = null), (state.authStatus = 'success'), (state.user = null);
     });
 
     builder.addCase(getUserFromSession.fulfilled, (state, action: PayloadAction<TUser>) => {
       state.user = action.payload;
       state.error = null;
-      state.status = 'success';
+      state.authStatus = 'success';
     });
     builder.addCase(getUserFromSession.rejected, (state) => {
       state.error = null;
-      state.status = 'idle';
+      state.authStatus = 'idle';
     });
   },
 });
