@@ -14,7 +14,7 @@ const fetchApiKeys: NextApiHandler<TFetchApiKeysResponse> = async (req, res) => 
     const { userId } = req.body as TFetchApiKeyPayload;
     const apiKeys = await prisma.bt_Apikey.findMany({
       where: {
-        userId,
+        userId: Number(userId),
       },
     });
 
@@ -24,4 +24,4 @@ const fetchApiKeys: NextApiHandler<TFetchApiKeysResponse> = async (req, res) => 
   }
 };
 
-export default apiHandler({ GET: fetchApiKeys });
+export default apiHandler({ POST: fetchApiKeys });
