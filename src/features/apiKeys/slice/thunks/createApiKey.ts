@@ -1,11 +1,11 @@
 import { bt_Apikey } from '@prisma/client';
 import { createAsyncThunk } from '@reduxjs/toolkit';
-import { TCreateApiKeyPayload, TCreateApiKeyResponse } from '../../types/types';
+import { TCreateAPIKeyPayload, TCreateAPIKeyResponse } from '../../types/types';
 
-export const createApiKey = createAsyncThunk<bt_Apikey, TCreateApiKeyPayload>(
+export const createAPIKey = createAsyncThunk<bt_Apikey, TCreateAPIKeyPayload>(
   'apiKeys/createApiKey',
   async ({ userId, name, key, secret }, { fulfillWithValue, rejectWithValue }) => {
-    const createApiKey = await fetch('/api/apiKeys/createApiKey', {
+    const createAPIKey = await fetch('/api/apiKeys/createAPIKey', {
       method: 'POST',
       headers: { 'content-type': 'application/json;charset=UTF-8' },
       body: JSON.stringify({
@@ -13,10 +13,10 @@ export const createApiKey = createAsyncThunk<bt_Apikey, TCreateApiKeyPayload>(
         name,
         key,
         secret,
-      } as TCreateApiKeyPayload),
+      } as TCreateAPIKeyPayload),
     });
 
-    const { newApiKey, error }: TCreateApiKeyResponse = await createApiKey.json();
+    const { newApiKey, error }: TCreateAPIKeyResponse = await createAPIKey.json();
     if (!newApiKey) return rejectWithValue(error);
 
     return fulfillWithValue(newApiKey);

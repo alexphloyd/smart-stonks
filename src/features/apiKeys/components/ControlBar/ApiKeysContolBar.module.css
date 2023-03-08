@@ -4,6 +4,8 @@
   padding: 12px 3.5% 17px 3.5%;
   width: 100%;
   background-color: var(--bot-bg);
+  border-radius: 8px;
+
   box-shadow: rgba(0, 0, 0, 0.24) 0px 3px 8px;
 }
 

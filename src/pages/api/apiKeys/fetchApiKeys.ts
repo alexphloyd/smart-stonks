@@ -2,16 +2,16 @@ import prisma from 'db';
 import createHttpError from 'http-errors';
 import { NextApiHandler } from 'next';
 import { apiHandler } from '@/utils/api/apiHandler';
-import { TFetchApiKeyPayload, TFetchApiKeysResponse } from '@/features/apiKeys/types/types';
-import { FetchApiKeys } from '@/features/apiKeys/types/validation';
+import { TFetchAPIKeyPayload, TFetchAPIKeysResponse } from '@/features/apiKeys/types/types';
+import { FetchAPIKeys } from '@/features/apiKeys/types/validation';
 
-const fetchApiKeys: NextApiHandler<TFetchApiKeysResponse> = async (req, res) => {
+const fetchAPIKeys: NextApiHandler<TFetchAPIKeysResponse> = async (req, res) => {
   try {
-    if (!FetchApiKeys.safeParse(req.body).success) {
+    if (!FetchAPIKeys.safeParse(req.body).success) {
       throw new createHttpError.BadRequest('Bad payload.');
     }
 
-    const { userId } = req.body as TFetchApiKeyPayload;
+    const { userId } = req.body as TFetchAPIKeyPayload;
     const apiKeys = await prisma.bt_Apikey.findMany({
       where: {
         userId: Number(userId),
@@ -24,4 +24,4 @@ const fetchApiKeys: NextApiHandler<TFetchApiKeysResponse> = async (req, res) => 
   }
 };
 
-export default apiHandler({ POST: fetchApiKeys });
+export default apiHandler({ POST: fetchAPIKeys });

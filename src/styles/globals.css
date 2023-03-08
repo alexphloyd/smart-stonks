@@ -51,8 +51,17 @@
   --gray-text-color: rgb(84, 86, 89);
   --gray-text-color-hovered: rgb(94, 97, 101);
 
+  /* apiKey Component */
+  --key-icon-color: #474d57;
+  --robot-icon-color: #ffc800c5;
+  --apiKey-gray-color: #505660;
+
+  --key-color: #767676;
+  --key-bg: #5151510c;
+  --key-bg-pseudo: #1a1b21;
+
   /* skelet */
-  --skelet-bgc: rgba(52, 52, 52, 0.347);
+  --skelet-bgc: rgba(43, 43, 43, 0.136);
 }
 
 :root[data-theme='light'] {
@@ -99,6 +108,17 @@
   --gray-btn-border-color: rgba(120, 120, 120, 0.136);
   --gray-text-color: rgb(107 114 128);
   --gray-text-color-hovered: rgb(74, 75, 79);
+
+  /* apiKey Component */
+  --key-icon-color: #949494;
+  --robot-icon-color: #a38209f9;
+
+  --apiKey-gray-color: #2a2d2a;
+
+  --key-color: #1e2329;
+  --key-bg: #d4d4d43d;
+
+  --key-bg-pseudo: #f1f1f1;
 
   /* skelet */
   --skelet-bgc: rgba(53, 53, 53, 0.081);

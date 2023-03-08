@@ -12,7 +12,6 @@ export const UserAuthInfo = () => {
   const dispatch = useAppDispatch();
   const { user, authStatus } = useAppSelector((store) => store.auth);
 
-  // presist
   useEffect(() => {
     dispatch(getUserFromSession());
   }, []);
@@ -23,17 +22,7 @@ export const UserAuthInfo = () => {
 
   if (authStatus === 'pending') return <UserAuthInfoSkelet />;
 
-  if (user) {
-    return (
-      <div className={s.container}>
-        <button className={s.userName}>{user.email.split('@')[0]}</button>
-        <button onClick={handleLogout} className={s.exitButton}>
-          <Icon name='exit' className={s.exitIcon} />
-        </button>
-        <span className='horizontaLine'></span>
-      </div>
-    );
-  } else {
+  if (!user) {
     return (
       <div className={s.container}>
         <Link href='/auth/signin' className={s.logIn} onClick={() => dispatch(closeMobileMenu())}>
@@ -50,4 +39,14 @@ export const UserAuthInfo = () => {
       </div>
     );
   }
+
+  return (
+    <div className={s.container}>
+      <button className={s.userName}>{user.email.split('@')[0]}</button>
+      <button onClick={handleLogout} className={s.exitButton}>
+        <Icon name='exit' className={s.exitIcon} />
+      </button>
+      <span className='horizontaLine'></span>
+    </div>
+  );
 };

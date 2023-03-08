@@ -1,23 +1,23 @@
-import { bt_Apikey } from '@prisma/client';
 import { z } from 'zod';
-import { ApiKey } from './validation';
+import { bt_Apikey } from '@prisma/client';
+import { APIKey } from './validation';
 
-export type TApiKey = z.infer<typeof ApiKey>;
+export type TAPIKey = z.infer<typeof APIKey>;
 
-export type TFetchApiKeysResponse = {
+export type TFetchAPIKeysResponse = {
   apiKeys?: bt_Apikey[];
   error?: Error;
 };
 
-export interface TFetchApiKeyPayload {
+export interface TFetchAPIKeyPayload {
   userId: number;
 }
 
-export interface TCreateApiKeyPayload extends TApiKey {
+export interface TCreateAPIKeyPayload extends TAPIKey {
   userId: number;
 }
 
-export type TCreateApiKeyResponse = {
+export type TCreateAPIKeyResponse = {
   newApiKey?: bt_Apikey;
   error?: Error;
 };

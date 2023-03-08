@@ -1,18 +1,18 @@
-import { fetchApiKeys } from './thunks/fetchApiKeys';
-import { createApiKey } from './thunks/createApiKey';
+import { fetchAPIKeys } from './thunks/fetchAPIKeys';
+import { createAPIKey } from './thunks/createAPIKey';
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 import { bt_Apikey } from '@prisma/client';
 
-interface ApiKeysSlice {
+interface APIKeysSlice {
   apiKeys: bt_Apikey[] | undefined;
-  isCreateApiKeyFormVisible: boolean;
+  isCreateAPIKeyFormVisible: boolean;
   apiKeysStatus: 'idle' | 'pending' | 'success' | 'error';
   error: Error | null;
 }
 
-const initialState: ApiKeysSlice = {
+const initialState: APIKeysSlice = {
   apiKeys: [],
-  isCreateApiKeyFormVisible: false,
+  isCreateAPIKeyFormVisible: false,
   apiKeysStatus: 'idle',
   error: null,
 };
@@ -22,33 +22,33 @@ export const apiKeysSlice = createSlice({
   initialState,
   reducers: {
     openCreateApiKeyForm(state) {
-      state.isCreateApiKeyFormVisible = true;
+      state.isCreateAPIKeyFormVisible = true;
     },
   },
   extraReducers(builder) {
-    builder.addCase(fetchApiKeys.pending, (state) => {
+    builder.addCase(fetchAPIKeys.pending, (state) => {
       state.apiKeysStatus = 'pending';
     });
     builder.addCase(
-      fetchApiKeys.fulfilled,
+      fetchAPIKeys.fulfilled,
       (state, action: PayloadAction<bt_Apikey[] | undefined>) => {
         state.apiKeysStatus = 'success';
         state.apiKeys = action.payload;
       }
     );
-    builder.addCase(fetchApiKeys.rejected, (state) => {
+    builder.addCase(fetchAPIKeys.rejected, (state) => {
       state.apiKeysStatus = 'error';
     });
 
-    builder.addCase(createApiKey.pending, (state) => {
+    builder.addCase(createAPIKey.pending, (state) => {
       state.apiKeysStatus = 'pending';
     });
-    builder.addCase(createApiKey.fulfilled, (state) => {
+    builder.addCase(createAPIKey.fulfilled, (state) => {
       state.apiKeysStatus = 'success';
       state.error = null;
-      state.isCreateApiKeyFormVisible = false;
+      state.isCreateAPIKeyFormVisible = false;
     });
-    builder.addCase(createApiKey.rejected, (state, action) => {
+    builder.addCase(createAPIKey.rejected, (state, action) => {
       state.error = action.payload as Error;
       state.apiKeysStatus = 'error';
     });

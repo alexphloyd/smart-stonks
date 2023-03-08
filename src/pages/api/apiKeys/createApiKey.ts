@@ -1,18 +1,18 @@
 import prisma from 'db';
 import createHttpError from 'http-errors';
-import { TCreateApiKeyPayload } from './../../../features/apiKeys/types/types';
-import { TCreateApiKeyResponse } from '@/features/apiKeys/types/types';
-import { ApiKey } from '@/features/apiKeys/types/validation';
+import { TCreateAPIKeyPayload } from '../../../features/apiKeys/types/types';
+import { TCreateAPIKeyResponse } from '@/features/apiKeys/types/types';
+import { APIKey } from '@/features/apiKeys/types/validation';
 import { apiHandler } from '@/utils/api/apiHandler';
 import { NextApiHandler } from 'next';
 
-const createApiKey: NextApiHandler<TCreateApiKeyResponse> = async (req, res) => {
+const createAPIKey: NextApiHandler<TCreateAPIKeyResponse> = async (req, res) => {
   try {
-    if (!ApiKey.safeParse(req.body).success) {
+    if (!APIKey.safeParse(req.body).success) {
       throw new createHttpError.BadRequest('Bad payload.');
     }
 
-    const { userId, name, key, secret } = req.body as TCreateApiKeyPayload;
+    const { userId, name, key, secret } = req.body as TCreateAPIKeyPayload;
     const newApiKey = await prisma.bt_Apikey.create({
       data: {
         userId: Number(userId),
@@ -30,5 +30,5 @@ const createApiKey: NextApiHandler<TCreateApiKeyResponse> = async (req, res) => 
 };
 
 export default apiHandler({
-  POST: createApiKey,
+  POST: createAPIKey,
 });

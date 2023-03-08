@@ -1,28 +1,28 @@
 import Form from '@/components/Form/Form';
 import LabeledTextField from '@/components/textFields/LabeledTextField/LabeledTextField';
-import { createApiKey } from '@/features/apiKeys/slice/thunks/createApiKey';
-import { TApiKey, TCreateApiKeyPayload } from '@/features/apiKeys/types/types';
-import { ApiKey } from '@/features/apiKeys/types/validation';
+import { createAPIKey } from '@/features/apiKeys/slice/thunks/createAPIKey';
+import { TAPIKey, TCreateAPIKeyPayload } from '@/features/apiKeys/types/types';
+import { APIKey } from '@/features/apiKeys/types/validation';
 import { useAppDispatch, useAppSelector } from '@/store/hooks/hooks';
 import { forwardRef, Ref, useState } from 'react';
 import s from '../../ControlBar/ApiKeysContolBar.module.css';
 
-export const CreateApiKeyForm = forwardRef((props, ref: Ref<HTMLFormElement>) => {
+export const CreateAPIKeyForm = forwardRef((props, ref: Ref<HTMLFormElement>) => {
   const dispatch = useAppDispatch();
   const userId = useAppSelector((state) => state.auth.user?.id);
 
   const [inputErrors, setInputErrors] = useState<object | null>(null);
   const handleSetInputErrors = (errors: object | null) => setInputErrors(errors);
 
-  const handleAddApiKey = async (apiKeyData: TApiKey) => {
-    dispatch(createApiKey({ ...apiKeyData, userId } as TCreateApiKeyPayload));
+  const handleAddAPIKey = async (apiKeyData: TAPIKey) => {
+    dispatch(createAPIKey({ ...apiKeyData, userId } as TCreateAPIKeyPayload));
   };
 
   return (
     <Form
       ref={ref}
-      schema={ApiKey}
-      onSubmit={handleAddApiKey}
+      schema={APIKey}
+      onSubmit={handleAddAPIKey}
       setInputsError={handleSetInputErrors}
       className={s.createKeyForm}
     >
@@ -40,7 +40,7 @@ export const CreateApiKeyForm = forwardRef((props, ref: Ref<HTMLFormElement>) =>
         name='key'
         label='API Key'
         errors={inputErrors}
-        placeholder='Key..'
+        placeholder='key..'
         inputSize='small'
         addClass={s.input}
         maxWidth={'none'}
@@ -50,7 +50,7 @@ export const CreateApiKeyForm = forwardRef((props, ref: Ref<HTMLFormElement>) =>
         name='secret'
         label='Secret Key'
         errors={inputErrors}
-        placeholder='Secret Key..'
+        placeholder='key..'
         inputSize='small'
         addClass={s.lastInput}
         maxWidth={'none'}

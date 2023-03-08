@@ -1,13 +1,15 @@
 import { AccessDenied } from '@/components/screens/accessDenied/AccessDenied';
-import { UserApiKeys } from '@/components/screens/apiKeys/UserApiKeys';
+import { UserAPIKeys } from '@/components/screens/apiKeys/UserAPIKeys';
 import { useAppSelector } from '@/store/hooks/hooks';
 
 export default function ApiKeys() {
-  const user = useAppSelector((store) => store.auth.user);
+  const { user, authStatus } = useAppSelector((store) => store.auth);
+
+  if (authStatus === 'pending') return null;
 
   if (!user) {
     return <AccessDenied />;
   }
 
-  return <UserApiKeys />;
+  return <UserAPIKeys />;
 }

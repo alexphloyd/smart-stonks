@@ -1,16 +1,16 @@
+import { CreateAPIKeyForm } from '../forms/CreateAPIKeyForm/CreateAPIKeyForm';
 import { AnimatePresence, motion } from 'framer-motion';
 import { Icon } from 'src/components/Icon/Icon';
-import { useRef, useState } from 'react';
-import s from './ApiKeysContolBar.module.css';
-import { CreateApiKeyForm } from '../forms/CreateApiKeyForm/CreateApiKeyForm';
+import { useRef } from 'react';
 import { useAppDispatch, useAppSelector } from '@/store/hooks/hooks';
 import { openCreateApiKeyForm } from '../../slice/apiKeysSlice';
+import s from './ApiKeysContolBar.module.css';
 
-export const ApiKeysControlBar = () => {
+export const APIKeysControlBar = () => {
   const dispatch = useAppDispatch();
 
   const formRef = useRef<HTMLFormElement>(null);
-  const isFormVisible = useAppSelector((store) => store.apiKeys.isCreateApiKeyFormVisible);
+  const isFormVisible = useAppSelector((store) => store.apiKeys.isCreateAPIKeyFormVisible);
 
   const handleOpenForm = () => {
     dispatch(openCreateApiKeyForm());
@@ -60,7 +60,7 @@ export const ApiKeysControlBar = () => {
                 transition={{ duration: 0.12 }}
                 className={s.activeAddKeyBar}
               >
-                <CreateApiKeyForm ref={formRef} />
+                <CreateAPIKeyForm ref={formRef} />
               </motion.div>
             ) : null}
           </motion.section>
