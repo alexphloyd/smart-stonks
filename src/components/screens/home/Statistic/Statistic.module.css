@@ -1,7 +1,7 @@
 .container {
   background-color: var(--second-background-color);
-  border-top-left-radius: 50px;
-  border-top-right-radius: 50px;
+  border-top-left-radius: 15px;
+  border-top-right-radius: 15px;
   padding-top: 35px;
 }
 
@@ -18,4 +18,11 @@
   text-align: center;
   margin-bottom: 20px;
   padding: 0 15px 0 15px;
+}
+
+@media (min-width: 768px) {
+  .container {
+    border-top-left-radius: 30px;
+    border-top-right-radius: 30px;
+  }
 }

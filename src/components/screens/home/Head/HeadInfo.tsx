@@ -1,10 +1,10 @@
+import HomeImg from '/public/images/robotHome.png';
+import Image from 'next/image';
+import Link from 'next/link';
 import { motion } from 'framer-motion';
 import { Icon } from 'src/components/Icon/Icon';
-import Image from 'next/image';
-import s from './HeadInfo.module.css';
-import HeadLightImage from '/public/images/HeadLightImage.png';
 import { useRef } from 'react';
-import Link from 'next/link';
+import s from './HeadInfo.module.css';
 
 export const HeadInfo = () => {
   const statisticButtonRef = useRef<HTMLButtonElement>(null);
@@ -18,7 +18,7 @@ export const HeadInfo = () => {
         className={s.textContainer}
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}
-        transition={{ duration: 0.7, delay: 0.2 }}
+        transition={{ duration: 0.7 }}
       >
         <h2 className={s.bigLabel}>Short Info about Smart-Stonks</h2>
         <p className={s.additionalText}>
@@ -49,9 +49,14 @@ export const HeadInfo = () => {
         </div>
       </motion.div>
 
-      <div className={s.imageContainer}>
-        <Image src={HeadLightImage} alt='light-image' width={'500'} height={'500'} />
-      </div>
+      <motion.div
+        initial={{ scale: 0, opacity: 0 }}
+        animate={{ scale: 1, opacity: 1 }}
+        transition={{ duration: 0.4, delay: 0.7 }}
+        className={s.imageContainer}
+      >
+        <Image src={HomeImg} alt='light-image' width={'500'} height={'500'} />
+      </motion.div>
     </section>
   );
 };

@@ -6,6 +6,9 @@
   padding: 15px 3% 15px 3%;
   z-index: 600;
   background-color: var(--header-background-color);
+  border-bottom-left-radius: 15px;
+  border-bottom-right-radius: 15px;
+
   font-size: 15px;
 }
 
@@ -20,5 +23,7 @@
 @media (min-width: 768px) {
   .main-container {
     padding: 16px 6.3% 16px 6.3%;
+    border-bottom-left-radius: 30px;
+    border-bottom-right-radius: 30px;
   }
 }
