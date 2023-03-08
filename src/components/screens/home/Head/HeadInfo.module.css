@@ -10,6 +10,30 @@
   padding: 0px 6% 10px 6%;
 }
 
+.container::after {
+  content: '';
+  position: absolute;
+  width: 200px;
+  height: 260px;
+  top: -20px;
+  left: -130px;
+  background-color: #3c40572b;
+  filter: blur(50px);
+  z-index: 1;
+}
+
+.container::before {
+  content: '';
+  position: absolute;
+  width: 200px;
+  height: 260px;
+  top: 190px;
+  right: 40%;
+  background-color: #3c405728;
+  filter: blur(100px);
+  z-index: 1;
+}
+
 .textContainer {
   width: 100%;
   display: flex;
