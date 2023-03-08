@@ -1,6 +1,6 @@
 import { useAppDispatch, useAppSelector } from '@/store/hooks/hooks';
 import { nanoid } from '@reduxjs/toolkit';
-import { useEffect } from 'react';
+import { useEffect, useTransition } from 'react';
 import { fetchAPIKeys } from '../../slice/thunks/fetchAPIKeys';
 import { APIKey } from '../Key/APIKey';
 import { APIKeysTableSkelet } from './components/APIKeysTableSkelet/APIKeysTableSkelet';
@@ -9,7 +9,7 @@ import s from './APIKeysTable.module.css';
 export const APIKeysTable = () => {
   const dispatch = useAppDispatch();
   const { user } = useAppSelector((store) => store.auth);
-  const { apiKeys, apiKeysStatus } = useAppSelector((store) => store.apiKeys);
+  const { apiKeys, apiKeysStatus, isFirstLoading } = useAppSelector((store) => store.apiKeys);
 
   useEffect(() => {
     if (user && apiKeysStatus === 'idle') {
@@ -17,7 +17,7 @@ export const APIKeysTable = () => {
     }
   }, [user]);
 
-  if (apiKeysStatus === 'pending') {
+  if (apiKeysStatus === 'pending' && isFirstLoading) {
     return <APIKeysTableSkelet />;
   }
 

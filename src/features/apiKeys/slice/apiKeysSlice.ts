@@ -6,6 +6,7 @@ import { bt_Apikey } from '@prisma/client';
 interface APIKeysSlice {
   apiKeys: bt_Apikey[] | undefined;
   isCreateAPIKeyFormVisible: boolean;
+  isFirstLoading: boolean;
   apiKeysStatus: 'idle' | 'pending' | 'success' | 'error';
   error: Error | null;
 }
@@ -13,6 +14,7 @@ interface APIKeysSlice {
 const initialState: APIKeysSlice = {
   apiKeys: [],
   isCreateAPIKeyFormVisible: false,
+  isFirstLoading: true,
   apiKeysStatus: 'idle',
   error: null,
 };
@@ -33,6 +35,7 @@ export const apiKeysSlice = createSlice({
       fetchAPIKeys.fulfilled,
       (state, action: PayloadAction<bt_Apikey[] | undefined>) => {
         state.apiKeysStatus = 'success';
+        state.isFirstLoading = false;
         state.apiKeys = action.payload;
       }
     );
