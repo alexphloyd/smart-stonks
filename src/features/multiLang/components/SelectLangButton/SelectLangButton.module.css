@@ -1,0 +1,13 @@
+.button {
+  width: 32px;
+  height: 32px;
+  transition: all;
+  transition-duration: var(--transition-duration);
+  cursor: pointer;
+  z-index: 10000;
+  padding: 7px;
+}
+
+.button:hover {
+  color: var(--primary-text-color-hovered);
+}

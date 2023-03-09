@@ -1,0 +1,108 @@
+.mainContainer {
+  display: flex;
+  flex-direction: column;
+  padding: 12px 3.5% 17px 3.5%;
+  width: 100%;
+  background-color: var(--bot-bg);
+  border-radius: 8px;
+
+  box-shadow: rgba(0, 0, 0, 0.24) 0px 3px 8px;
+}
+
+.labelContainer {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.labelContainer div {
+  margin-bottom: -5px;
+  display: flex;
+  flex-direction: column;
+}
+
+.label {
+  color: var(--primary-text-color);
+}
+
+.binanceLink {
+  color: var(--gray-text-color);
+  font-size: 14px;
+  transition: all;
+  transition-duration: 200ms;
+}
+
+.binanceLink:hover {
+  color: var(--gray-text-color-hovered);
+}
+
+.addButton {
+  border: 1px solid rgba(146, 146, 146, 0.136);
+  background-color: var(--gray-btn-bg);
+  border-radius: 5px;
+  padding: 1px 2px;
+  margin-bottom: -1px;
+  transition: all;
+  transition-duration: var(--transition-duration);
+}
+
+.addButton:hover {
+  background-color: var(--gray-btn-bg-hovered);
+}
+
+.addButtonIcon {
+  width: 35px;
+  height: 35px;
+  padding: 2px;
+  color: gray;
+}
+
+.confirmButtonIcon {
+  width: 35px;
+  height: 35px;
+  padding: 5px;
+  color: gray;
+}
+
+.activeAddKeyBarContainer {
+  overflow: hidden;
+}
+
+.createKeyForm {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  margin-top: 40px;
+}
+
+.input {
+  margin-bottom: 35px;
+}
+
+.lastInput {
+  margin-bottom: 6px;
+}
+
+@media (min-width: 900px) {
+  .createKeyForm {
+    flex-direction: row;
+    justify-content: space-between;
+  }
+
+  .input {
+    margin-bottom: 5px;
+    margin-right: 30px;
+  }
+
+  .lastInput {
+    margin-right: 0px;
+    margin-bottom: 5px;
+  }
+}
+
+@media (min-width: 768px) {
+  .mainContainer {
+    padding: 15px 2% 17px 2%;
+  }
+}

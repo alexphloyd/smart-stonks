@@ -1,0 +1,15 @@
+.plainLabel {
+  position: absolute;
+  top: -21px;
+  left: 3px;
+  color: var(--primary-text-color);
+  font-size: 13px;
+}
+
+.errorLabel {
+  position: absolute;
+  top: -21px;
+  left: 3px;
+  color: var(--error-label-color);
+  font-size: 13px;
+}

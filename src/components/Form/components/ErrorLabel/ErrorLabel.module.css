@@ -1,0 +1,8 @@
+.errorLabel {
+  position: absolute;
+  top: 70px;
+  left: 0;
+  width: 100%;
+  color: var(--error-label-color);
+  text-align: center;
+}

@@ -1,0 +1,24 @@
+.section {
+  width: 100%;
+  max-width: fit-content;
+}
+
+.logo {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  cursor: pointer;
+  max-width: fit-content;
+
+  z-index: 20000;
+}
+
+.img {
+  margin-right: 6px;
+}
+
+.label {
+  color: var(--orange-color);
+  font-size: 19px;
+  letter-spacing: 2px;
+}
