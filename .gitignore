@@ -34,3 +34,12 @@ yarn-error.log*
 # typescript
 *.tsbuildinfo
 next-env.d.ts
+
+#shared 
+/src/shared
+
+# db
+/db/migration
+/db/schema.prisma
+
+.env
