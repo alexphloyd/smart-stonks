@@ -3,7 +3,7 @@ import { AnimatePresence, motion } from 'framer-motion';
 import { Icon } from 'src/components/Icon/Icon';
 import { useRef } from 'react';
 import { useAppDispatch, useAppSelector } from '@/store/hooks/hooks';
-import { openCreateApiKeyForm } from '../../slice/apiKeysSlice';
+import { openCreateAPIKeyForm } from '../../slice/apiKeysSlice';
 import s from './ApiKeysContolBar.module.css';
 
 export const APIKeysControlBar = () => {
@@ -13,7 +13,7 @@ export const APIKeysControlBar = () => {
   const isFormVisible = useAppSelector((store) => store.apiKeys.isCreateAPIKeyFormVisible);
 
   const handleOpenForm = () => {
-    dispatch(openCreateApiKeyForm());
+    dispatch(openCreateAPIKeyForm());
   };
 
   const handleSubmit = () => {

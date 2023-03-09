@@ -1,7 +1,7 @@
-import { fetchAPIKeys } from './thunks/fetchAPIKeys';
-import { createAPIKey } from './thunks/createAPIKey';
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 import { bt_Apikey } from '@prisma/client';
+import { createAPIKey } from './thunks/createAPIKey';
+import { fetchAPIKeys } from './thunks/fetchAPIKeys';
 
 interface APIKeysSlice {
   apiKeys: bt_Apikey[] | undefined;
@@ -23,7 +23,7 @@ export const apiKeysSlice = createSlice({
   name: 'apiKeys',
   initialState,
   reducers: {
-    openCreateApiKeyForm(state) {
+    openCreateAPIKeyForm(state) {
       state.isCreateAPIKeyFormVisible = true;
     },
   },
@@ -58,6 +58,6 @@ export const apiKeysSlice = createSlice({
   },
 });
 
-export const { openCreateApiKeyForm } = apiKeysSlice.actions;
+export const { openCreateAPIKeyForm } = apiKeysSlice.actions;
 
 export default apiKeysSlice.reducer;

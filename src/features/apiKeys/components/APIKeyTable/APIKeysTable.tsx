@@ -1,6 +1,6 @@
 import { useAppDispatch, useAppSelector } from '@/store/hooks/hooks';
 import { nanoid } from '@reduxjs/toolkit';
-import { useEffect, useTransition } from 'react';
+import { useEffect } from 'react';
 import { fetchAPIKeys } from '../../slice/thunks/fetchAPIKeys';
 import { APIKey } from '../Key/APIKey';
 import { APIKeysTableSkelet } from './components/APIKeysTableSkelet/APIKeysTableSkelet';
