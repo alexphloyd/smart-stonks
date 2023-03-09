@@ -36,10 +36,10 @@ yarn-error.log*
 next-env.d.ts
 
 #shared 
-/src/shared
+/src/shared/
 
 # db
-/db/migration
-/db/schema.prisma
+/db/
 
-.env
+#yarn
+yarn.lock
